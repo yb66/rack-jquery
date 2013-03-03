@@ -8,3 +8,8 @@ group :test do
   gem 'simplecov'
   gem 'rack-test'
 end
+
+group :examples do
+  gem "sinatra"
+  gem "haml"
+end
