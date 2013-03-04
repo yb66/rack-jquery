@@ -10,12 +10,14 @@ I get tired of copy and pasting and downloading and moving… jQuery files and s
 
 Have a look in the examples directory, but here's a snippet.
 
-1. Install it (see below)
-2. Require `'rack/jquery`.
-3. Put this in the head of your layout (the example is Haml but you can use whatever you like)
+* Install it (see below)
+* Require `'rack/jquery`.
+* Put this in the head of your layout (the example is Haml but you can use whatever you like)
 
+    <pre><code>
     %head
-      = Rack::JQuery.cdn`
+      = Rack::JQuery.cdn
+    </code></pre>
 
 Now you have the script tags to Google's CDN in the head (you can also use Media Temple or Microsoft, see the docs).
 
