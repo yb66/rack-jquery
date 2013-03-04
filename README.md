@@ -16,7 +16,7 @@ I get tired of copy and pasting and downloading and moving… jQuery files and s
 Have a look in the examples directory, but here's a snippet.
 
 * Install it (see below)
-* Require `'rack/jquery`.
+* `require 'rack/jquery'`.
 * Put this in the head of your layout (the example is Haml but you can use whatever you like)
 
     <pre><code>
@@ -26,13 +26,13 @@ Have a look in the examples directory, but here's a snippet.
 
 Now you have the script tags to Google's CDN in the head (you can also use Media Temple or Microsoft, see the docs).
 
-It also adds in a bit of javascript that will load in a locally kept version of jQuery, just incase the CDN is unreachable. The script will use the "/js/jquery-#{VERSION}.min.js" path. You can change the "/js" bit if you like (see the docs).
+It also adds in a bit of javascript that will load in a locally kept version of jQuery, just incase the CDN is unreachable. The script will use the "/js/jquery-1.9.1.min.js" path (or, instead of 1.9.1, whatever is in {Rack::JQuery::VERSION}). You can change the "/js" bit if you like (see the docs).
 
 That was easy.
 
 ## Version numbers ##
 
-This library uses [semver](http://semver.org/) to version the **library**. That means the library version is ***not*** an indicator of quality but a way to manage changes. The version of jQuery can be found in the lib/rack/jquery/version.rb file, or via the Rack::JQuery::JQUERY_VERSION constant.
+This library uses [semver](http://semver.org/) to version the **library**. That means the library version is ***not*** an indicator of quality but a way to manage changes. The version of jQuery can be found in the lib/rack/jquery/version.rb file, or via the {Rack::JQuery::JQUERY_VERSION} constant.
 
 ## Installation
 
