@@ -27,6 +27,12 @@ end
 
 describe "Inserting the CDN" do
   include_context "All routes"
+  context "Check the examples run at all" do
+    before do
+      get "/"
+    end
+    it_should_behave_like "Any route"
+  end
   context "Google CDN" do
     before do
       get "/google-cdn"
