@@ -19,4 +19,6 @@ group :development do
   gem "wirble"
   gem "pry"
   gem "pry-nav"
+  gem "yard"
+  gem "maruku"
 end
