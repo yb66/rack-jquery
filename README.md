@@ -1,6 +1,11 @@
-# Rack::Jquery
+# Rack::JQuery
 
 [jQuery](http://jquery.com/download/) CDN script tags and fallback in one neat package.
+
+### Build status ###
+
+Master branch:
+[![Build Status](https://secure.travis-ci.org/yb66/rack-jquery.png?branch=master)](http://travis-ci.org/yb66/rack-jquery)
 
 ## Why? ##
 
