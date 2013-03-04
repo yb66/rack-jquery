@@ -6,7 +6,7 @@
 
 I get tired of copy and pasting and downloading and moving… jQuery files and script tags etc. This does it for me, and keeps version management nice 'n' easy.
 
-## Example ##
+## Usage ##
 
 Have a look in the examples directory, but here's a snippet.
 
@@ -42,10 +42,6 @@ And then execute:
 Or install it yourself as:
 
     $ gem install rack-jquery
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Contributing
 
