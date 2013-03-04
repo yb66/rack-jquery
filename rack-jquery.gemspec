@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["iainspeed@gmail.com"]
   spec.description   = %q{jQuery CDN script tags and fallback in one neat package.}
   spec.summary       = %q{The description says it all.}
-  spec.homepage      = "https://github/yb66/rack-jquery"
+  spec.homepage      = "https://github.com/yb66/rack-jquery"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
