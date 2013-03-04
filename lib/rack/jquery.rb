@@ -5,20 +5,22 @@ module Rack
   # jQuery CDN script tags and fallback in one neat package.
   class JQuery
 
+    JQUERY_FALLBACK_FILE = "jquery-#{VERSION}.min.js"
+
     # Script tags for the Media Temple CDN
-    MEDIA_TEMPLE = "<script src='http://code.jquery.com/jquery-#{VERSION}.min.js'></script>"
+    MEDIA_TEMPLE = "<script src='http://code.jquery.com/#{JQUERY_FALLBACK_FILE}'></script>"
 
     # Script tags for the Google CDN
     GOOGLE = "<script src='//ajax.googleapis.com/ajax/libs/jquery/#{VERSION}/jquery.min.js'></script>"
 
     # Script tags for the Microsoft CDN
-    MICROSOFT = "<script src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-#{VERSION}.min.js'></script>"
+    MICROSOFT = "<script src='http://ajax.aspnetcdn.com/ajax/jQuery/#{JQUERY_FALLBACK_FILE}'></script>"
 
     # This javascript checks if the jQuery object has loaded. If not, that most likely means the CDN is unreachable, so it uses the local minified jQuery.
     FALLBACK = <<STR
 <script type="text/javascript">
   if (typeof jQuery == 'undefined') {
-      document.write(unescape("%3Cscript src='/js/jquery-#{VERSION}.min.js' type='text/javascript'%3E))
+      document.write(unescape("%3Cscript src='/js/#{JQUERY_FALLBACK_FILE}' type='text/javascript'%3E))
   };
 </script>
 STR
@@ -45,24 +47,37 @@ STR
     end
 
 
+    # Default options hash for the middleware.
+    DEFAULT_OPTIONS = {
+      :http_path => "/js"
+    }
+
+
     # @param [#call] app
     # @param [Hash] options
+    # @option options [String] :http_path If you wish the jQuery fallback route to be "/js/jquery-1.9.1.min.js" (or whichever version this is at) then do nothing, that's the default. If you want the path to be "/assets/javascripts/jquery-1.9.1.min.js" then pass in `:http_path => "/assets/javascripts".
+    # @example
+    #   # The default:
+    #   use Rack::JQuery
+    #   # With a different route to the fallback:
+    #   use Rack::JQuery, :http_path => "/assets/js"
     def initialize( app, options={} )
-      @app, @options  = app, options
+      @app, @options  = app, DEFAULT_OPTIONS.merge(options)
+      @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FALLBACK_FILE
     end
 
 
     # @param [Hash] env Rack request environment hash.
     def call( env )
       request = Rack::Request.new(env.dup)
-      if request.path_info == "/js/jquery-#{VERSION}.min.js"
+      if request.path_info == @http_path_to_jquery
         response = Rack::Response.new
         # for caching
         response.headers.merge!( {
           "Last-Modified" => JQUERY_VERSION_DATE,
           "Expires"    => (Time.now + TEN_YEARS).strftime(HTTP_DATE),
           "Cache-Control" => "max-age=#{TEN_YEARS},public",
-          "Etag"          => "jquery-#{VERSION}.min.js",
+          "Etag"          => "#{JQUERY_FALLBACK_FILE}",
           'Content-Type' =>'application/javascript; charset=utf-8'
         })
 
@@ -71,7 +86,7 @@ STR
           response.status = 304
         else
           response.status = 200
-          response.write ::File.read( ::File.expand_path "../../../vendor/assets/javascripts/jquery-#{VERSION}.min.js", __FILE__)
+          response.write ::File.read( ::File.expand_path "../../../vendor/assets/javascripts/#{JQUERY_FALLBACK_FILE}", __FILE__)
         end
         response.finish
       else
