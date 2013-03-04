@@ -65,6 +65,10 @@ describe "Inserting the CDN" do
   end
 end
 
+
+require 'timecop'
+require 'time'
+
 describe "Serving the fallback jquery" do
   include_context "All routes"
   before do
@@ -74,4 +78,16 @@ describe "Serving the fallback jquery" do
   subject { last_response.body }
   it { should start_with "/*! jQuery v1.9.1" }
 
+  context "Re requests" do
+    before do
+      at_start = Time.parse(Rack::JQuery::JQUERY_VERSION_DATE) + 60 * 60 * 24 * 180
+      Timecop.freeze at_start
+      get "/js/jquery-#{Rack::JQuery::VERSION}.min.js"
+      Timecop.travel Time.now + 86400 # add a day
+      get "/js/jquery-#{Rack::JQuery::VERSION}.min.js", {}, {"HTTP_IF_MODIFIED_SINCE" => at_start.strftime(Rack::JQuery::HTTP_DATE) }
+    end
+    subject { last_response }
+    its(:status) { should == 304 }
+    
+  end
 end

@@ -7,6 +7,7 @@ group :test do
   gem 'rspec'
   gem 'simplecov'
   gem 'rack-test'
+  gem "timecop"
 end
 
 group :examples do
