@@ -5,22 +5,22 @@ module Rack
   # jQuery CDN script tags and fallback in one neat package.
   class JQuery
 
-    JQUERY_FALLBACK_FILE = "jquery-#{VERSION}.min.js"
+    JQUERY_FILE_NAME = "jquery-#{JQUERY_VERSION}.min.js"
 
     # Script tags for the Media Temple CDN
-    MEDIA_TEMPLE = "<script src='http://code.jquery.com/#{JQUERY_FALLBACK_FILE}'></script>"
+    MEDIA_TEMPLE = "<script src='http://code.jquery.com/#{JQUERY_FILE_NAME}'></script>"
 
     # Script tags for the Google CDN
-    GOOGLE = "<script src='//ajax.googleapis.com/ajax/libs/jquery/#{VERSION}/jquery.min.js'></script>"
+    GOOGLE = "<script src='//ajax.googleapis.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js'></script>"
 
     # Script tags for the Microsoft CDN
-    MICROSOFT = "<script src='http://ajax.aspnetcdn.com/ajax/jQuery/#{JQUERY_FALLBACK_FILE}'></script>"
+    MICROSOFT = "<script src='http://ajax.aspnetcdn.com/ajax/jQuery/#{JQUERY_FILE_NAME}'></script>"
 
     # This javascript checks if the jQuery object has loaded. If not, that most likely means the CDN is unreachable, so it uses the local minified jQuery.
     FALLBACK = <<STR
 <script type="text/javascript">
   if (typeof jQuery == 'undefined') {
-      document.write(unescape("%3Cscript src='/js/#{JQUERY_FALLBACK_FILE}' type='text/javascript'%3E))
+      document.write(unescape("%3Cscript src='/js/#{JQUERY_FILE_NAME}' type='text/javascript'%3E))
   };
 </script>
 STR
@@ -63,7 +63,7 @@ STR
     #   use Rack::JQuery, :http_path => "/assets/js"
     def initialize( app, options={} )
       @app, @options  = app, DEFAULT_OPTIONS.merge(options)
-      @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FALLBACK_FILE
+      @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FILE_NAME
     end
 
 
@@ -77,7 +77,7 @@ STR
           "Last-Modified" => JQUERY_VERSION_DATE,
           "Expires"    => (Time.now + TEN_YEARS).strftime(HTTP_DATE),
           "Cache-Control" => "max-age=#{TEN_YEARS},public",
-          "Etag"          => "#{JQUERY_FALLBACK_FILE}",
+          "Etag"          => "#{JQUERY_FILE_NAME}",
           'Content-Type' =>'application/javascript; charset=utf-8'
         })
 
@@ -86,7 +86,7 @@ STR
           response.status = 304
         else
           response.status = 200
-          response.write ::File.read( ::File.expand_path "../../../vendor/assets/javascripts/#{JQUERY_FALLBACK_FILE}", __FILE__)
+          response.write ::File.read( ::File.expand_path "../../../vendor/assets/javascripts/#{JQUERY_FILE_NAME}", __FILE__)
         end
         response.finish
       else
