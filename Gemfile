@@ -13,3 +13,9 @@ group :examples do
   gem "sinatra"
   gem "haml"
 end
+
+group :development do
+  gem "wirble"
+  gem "pry"
+  gem "pry-nav"
+end
