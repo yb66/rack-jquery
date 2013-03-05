@@ -1,6 +1,6 @@
 module Rack
   class JQuery
-    VERSION = "1.0.0"
+    VERSION = "1.0.1"
     JQUERY_VERSION = "1.9.1"
 
     # This is the release date of the jQuery file, it makes an easy "Last-Modified" date for setting the headers around caching.
