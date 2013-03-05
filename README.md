@@ -55,3 +55,7 @@ Or install it yourself as:
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Licences ##
+
+The licence for this library is contained in LICENCE.txt. The jQuery library licence is contained in JQUERY-LICENCE.txt.

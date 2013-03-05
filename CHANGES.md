@@ -1,8 +1,11 @@
 # CH CH CH CHANGES #
 
-## Upcoming ##
+## v1.0.2 ##
+
+Tuesday the 5th of March 2013
 
 * Date format is produced by Rack::Utils now.
+* Included the jQuery libary (my .gitignore worked against me there, whoops!) and the licence for it.
 
 ## v1.0.1 ##
 

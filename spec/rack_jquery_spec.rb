@@ -82,7 +82,7 @@ describe "Serving the fallback jquery" do
   end
   it_should_behave_like "Any route"
   subject { last_response.body }
-  it { should start_with "/*! jQuery v1.9.1" }
+  it { should start_with "/*! jQuery v#{Rack::JQuery::JQUERY_VERSION}" }
 
   context "Re requests" do
     before do
