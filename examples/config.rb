@@ -55,5 +55,18 @@ __END__
   = yield
 
 @@index
-%p
-  "NOTHING TO SEE HERE, MOVE ALONG, MOVE ALONG"
+  
+%p.aclass
+  "NOTHING TO SEE HERE… "
+%p.aclass
+  "MOVE ALONG… "
+%p.aclass
+  "MOVE ALONG… "
+#placeholder
+:javascript
+  all_text = $('.aclass').text();
+  $('#placeholder').text(all_text).mouseover(function() {
+    $(this).css({ 'color': 'red', 'font-size': '150%' });    
+  }).mouseout(function() {
+    $(this).css({ 'color': 'blue', 'font-size': '100%' });
+  });
