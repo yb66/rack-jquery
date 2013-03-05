@@ -90,7 +90,7 @@ describe "Serving the fallback jquery" do
       Timecop.freeze at_start
       get "/js/jquery-#{Rack::JQuery::JQUERY_VERSION}.min.js"
       Timecop.travel Time.now + 86400 # add a day
-      get "/js/jquery-#{Rack::JQuery::JQUERY_VERSION}.min.js", {}, {"HTTP_IF_MODIFIED_SINCE" => at_start.strftime(Rack::JQuery::HTTP_DATE) }
+      get "/js/jquery-#{Rack::JQuery::JQUERY_VERSION}.min.js", {}, {"HTTP_IF_MODIFIED_SINCE" => Rack::Utils.rfc2109(at_start) }
     end
     subject { last_response }
     its(:status) { should == 304 }

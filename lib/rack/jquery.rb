@@ -25,9 +25,6 @@ module Rack
 </script>
 STR
 
-    # HTTP date format.
-    # @see http://www.ietf.org/rfc/rfc1123.txt
-    HTTP_DATE = "%a, %d %b %Y %T GMT"
 
     # Ten years in seconds.
     TEN_YEARS  = 60 * 60 * 24 * 365 * 10
@@ -75,7 +72,7 @@ STR
         # for caching
         response.headers.merge!( {
           "Last-Modified" => JQUERY_VERSION_DATE,
-          "Expires"    => (Time.now + TEN_YEARS).strftime(HTTP_DATE),
+          "Expires"    => Rack::Utils.rfc2109(Time.now + TEN_YEARS),
           "Cache-Control" => "max-age=#{TEN_YEARS},public",
           "Etag"          => "#{JQUERY_FILE_NAME}",
           'Content-Type' =>'application/javascript; charset=utf-8'
