@@ -1,5 +1,9 @@
 # CH CH CH CHANGES #
 
+## Upcoming ##
+
+* Date format is produced by Rack::Utils now.
+
 ## v1.0.1 ##
 
 Tuesday the 5th of March 2013
