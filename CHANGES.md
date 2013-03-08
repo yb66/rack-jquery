@@ -1,5 +1,13 @@
 # CH CH CH CHANGES #
 
+## v1.0.3 ##
+
+Friday the 8th of March 2013
+
+* Using shared rack-jquery-helpers library to cut down on duplication.
+
+----
+
 ## v1.0.2 ##
 
 Tuesday the 5th of March 2013
