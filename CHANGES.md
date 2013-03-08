@@ -1,5 +1,13 @@
 # CH CH CH CHANGES #
 
+## v1.0.4 ##
+
+Friday the 8th of March 2013
+
+* The jQuery version will now show up automatically in the description.
+
+----
+
 ## v1.0.3 ##
 
 Friday the 8th of March 2013
