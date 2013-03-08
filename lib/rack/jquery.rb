@@ -1,9 +1,11 @@
 require "rack/jquery/version"
+require "rack/jquery/helpers"
 
 module Rack
 
   # jQuery CDN script tags and fallback in one neat package.
   class JQuery
+    include Helpers
 
     JQUERY_FILE_NAME = "jquery-#{JQUERY_VERSION}.min.js"
 
@@ -24,10 +26,6 @@ module Rack
   };
 </script>
 STR
-
-
-    # Ten years in seconds.
-    TEN_YEARS  = 60 * 60 * 24 * 365 * 10
 
     # @param [Symbol] organisation Choose which CDN to use, either :google, :microsoft or :media_temple
     # @return [String] The HTML script tags to get the CDN.
@@ -70,13 +68,7 @@ STR
       if request.path_info == @http_path_to_jquery
         response = Rack::Response.new
         # for caching
-        response.headers.merge!( {
-          "Last-Modified" => JQUERY_VERSION_DATE,
-          "Expires"    => Rack::Utils.rfc2109(Time.now + TEN_YEARS),
-          "Cache-Control" => "max-age=#{TEN_YEARS},public",
-          "Etag"          => "#{JQUERY_FILE_NAME}",
-          'Content-Type' =>'application/javascript; charset=utf-8'
-        })
+        response.headers.merge! caching_headers( JQUERY_FILE_NAME, JQUERY_VERSION_DATE)
 
         # There's no need to test if the IF_MODIFIED_SINCE against the release date because the header will only be passed if the file was previously accessed by the requester, and the file is never updated. If it is updated then it is accessed by a different path.
         if request.env['HTTP_IF_MODIFIED_SINCE']
