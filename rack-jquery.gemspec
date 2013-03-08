@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Rack::JQuery::VERSION
   spec.authors       = ["Iain Barnett"]
   spec.email         = ["iainspeed@gmail.com"]
-  spec.description   = %q{jQuery CDN script tags and fallback in one neat package. Current version is for jQuery v#{Rack::JQuery::JQUERY_VERSION}}
+  spec.description   = %Q{jQuery CDN script tags and fallback in one neat package. Current version is for jQuery v#{Rack::JQuery::JQUERY_VERSION}}
   spec.summary       = %q{The description says it all.}
   spec.homepage      = "https://github.com/yb66/rack-jquery"
   spec.license       = "MIT"
