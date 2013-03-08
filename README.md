@@ -17,6 +17,7 @@ Have a look in the examples directory, but here's a snippet.
 
 * Install it (see below)
 * `require 'rack/jquery'`.
+* If you want fallback then add this to your middleware stack: `use Rack::JQuery`
 * Put this in the head of your layout (the example is Haml but you can use whatever you like)
 
     <pre><code>
