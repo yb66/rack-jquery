@@ -7,11 +7,11 @@
 Master branch:
 [![Build Status](https://secure.travis-ci.org/yb66/rack-jquery.png?branch=master)](http://travis-ci.org/yb66/rack-jquery)
 
-## Why? ##
+### Why? ###
 
 I get tired of copy and pasting and downloading and moving… jQuery files and script tags etc. This does it for me, and keeps version management nice 'n' easy.
 
-## Usage ##
+### Usage ###
 
 Have a look in the examples directory, but here's a snippet.
 
@@ -31,11 +31,11 @@ It also adds in a bit of javascript that will load in a locally kept version of 
 
 That was easy.
 
-## Version numbers ##
+### Version numbers ###
 
 This library uses [semver](http://semver.org/) to version the **library**. That means the library version is ***not*** an indicator of quality but a way to manage changes. The version of jQuery can be found in the lib/rack/jquery/version.rb file, or via the {Rack::JQuery::JQUERY_VERSION} constant.
 
-## Installation
+### Installation
 
 Add this line to your application's Gemfile:
 
@@ -49,7 +49,7 @@ Or install it yourself as:
 
     $ gem install rack-jquery
 
-## Contributing
+### Contributing ###
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -57,6 +57,6 @@ Or install it yourself as:
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## Licences ##
+### Licences ###
 
 The licence for this library is contained in LICENCE.txt. The jQuery library licence is contained in JQUERY-LICENCE.txt.
