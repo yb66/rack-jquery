@@ -1,5 +1,14 @@
 # CH CH CH CHANGES #
 
+## v1.1.0 ##
+
+Friday the 22nd of March 2013
+
+* Improved README by adding how to use the middleware (and why).
+* Should be thread safe now, by duplicating the `call` method.
+
+----
+
 ## v1.0.4 ##
 
 Friday the 8th of March 2013
