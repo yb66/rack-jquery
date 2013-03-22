@@ -64,6 +64,13 @@ STR
 
     # @param [Hash] env Rack request environment hash.
     def call( env )
+      dup._call env
+    end
+
+
+    # For thread safety
+    # @param (see #call)
+    def _call( env )
       request = Rack::Request.new(env.dup)
       if request.path_info == @http_path_to_jquery
         response = Rack::Response.new
