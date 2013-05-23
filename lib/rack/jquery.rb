@@ -16,7 +16,7 @@ module Rack
     GOOGLE = "<script src='//ajax.googleapis.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js'></script>"
 
     # Script tags for the Microsoft CDN
-    MICROSOFT = "<script src='http://ajax.aspnetcdn.com/ajax/jQuery/#{JQUERY_FILE_NAME}'></script>"
+    MICROSOFT = "<script src='//ajax.aspnetcdn.com/ajax/jQuery/#{JQUERY_FILE_NAME}'></script>"
 
     # Script tags for the Cloudflare CDN
     CLOUDFLARE = "<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js'></script>"
