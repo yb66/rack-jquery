@@ -8,7 +8,22 @@ class App < Sinatra::Base
   use Rack::JQuery
 
   get "/" do
-    "RUNNING"
+    output = <<STR
+!!!
+%body
+  %ul
+    %li
+      %a{ href: "/google-cdn"} google-cdn
+    %li
+      %a{ href: "/media-temple-cdn"} media-temple-cdn
+    %li
+      %a{ href: "/microsoft-cdn"} microsoft-cdn
+    %li
+      %a{ href: "/cloudflare-cdn"} cloudflare-cdn
+    %li
+      %a{ href: "/unspecified-cdn"} unspecified-cdn
+STR
+    haml output
   end
 
   get "/google-cdn" do
