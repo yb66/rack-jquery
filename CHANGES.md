@@ -1,5 +1,15 @@
 # CH CH CH CHANGES #
 
+## v1.2.0 ##
+
+Thursday the 23rd of May 2013
+
+* Added notes about the version number.
+* Updated the jQuery release for v2.0.0. See http://blog.jquery.com/2013/04/18/jquery-2-0-released/.
+
+----
+
+
 ## v1.1.0 ##
 
 Friday the 22nd of March 2013
