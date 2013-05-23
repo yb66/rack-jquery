@@ -1,5 +1,15 @@
 # CH CH CH CHANGES #
 
+## v1.3.1 ##
+
+Thursday the 23rd of May 2013
+
+* Added an easier way to run the examples.
+* Added links to make it easier to move around the app.
+
+----
+
+
 ## v1.3.0 ##
 
 Thursday the 23rd of May 2013
