@@ -1,5 +1,14 @@
 # CH CH CH CHANGES #
 
+## v1.3.2 ##
+
+Thursday the 23rd of May 2013
+
+* Made the Microsoft CDN link protocol relative.
+
+----
+
+
 ## v1.3.1 ##
 
 Thursday the 23rd of May 2013
