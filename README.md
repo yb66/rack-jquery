@@ -25,7 +25,7 @@ Have a look in the examples directory, but here's a snippet.
       = Rack::JQuery.cdn
     </code></pre>
 
-Now you have the script tags to Google's CDN in the head (you can also use Media Temple or Microsoft, see the docs).
+Now you have the script tags to Google's CDN in the head (you can also use Media Temple or Microsoft, or Cloudflare, see the docs).
 
 It also adds in a bit of javascript that will load in a locally kept version of jQuery, just incase the CDN is unreachable. The script will use the "/js/jquery-1.9.1.min.js" path (or, instead of 1.9.1, whatever is in {Rack::JQuery::VERSION}). You can change the "/js" bit if you like (see the docs).
 

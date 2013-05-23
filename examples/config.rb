@@ -23,6 +23,10 @@ class App < Sinatra::Base
     haml :index, :layout => :microsoft
   end
 
+  get "/cloudflare-cdn" do
+    haml :index, :layout => :cloudflare
+  end
+
   get "/unspecified-cdn" do
     haml :index, :layout => :unspecified
   end
@@ -46,6 +50,12 @@ __END__
 %html
   %head
     = Rack::JQuery.cdn( :media_temple )
+  = yield
+
+@@cloudflare
+%html
+  %head
+    = Rack::JQuery.cdn( :cloudflare )
   = yield
 
 @@unspecified
