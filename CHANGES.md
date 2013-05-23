@@ -1,5 +1,14 @@
 # CH CH CH CHANGES #
 
+## v1.3.0 ##
+
+Thursday the 23rd of May 2013
+
+* Added the Cloudflare CDN.
+
+____
+
+
 ## v1.2.0 ##
 
 Thursday the 23rd of May 2013
