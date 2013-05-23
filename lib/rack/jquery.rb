@@ -18,6 +18,9 @@ module Rack
     # Script tags for the Microsoft CDN
     MICROSOFT = "<script src='http://ajax.aspnetcdn.com/ajax/jQuery/#{JQUERY_FILE_NAME}'></script>"
 
+    # Script tags for the Cloudflare CDN
+    CLOUDFLARE = "<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js'></script>"
+
     # This javascript checks if the jQuery object has loaded. If not, that most likely means the CDN is unreachable, so it uses the local minified jQuery.
     FALLBACK = <<STR
 <script type="text/javascript">
@@ -35,6 +38,8 @@ STR
           MEDIA_TEMPLE
         when :microsoft
           MICROSOFT
+        when :cloudflare
+          CLOUDFLARE
         else
           GOOGLE
       end

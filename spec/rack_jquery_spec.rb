@@ -22,6 +22,10 @@ describe "The class methods" do
       let(:organisation) { :media_temple }
       it { should == "#{Rack::JQuery::MEDIA_TEMPLE}\n#{Rack::JQuery::FALLBACK}" }
     end
+    context "of :media_temple" do
+      let(:organisation) { :cloudflare }
+      it { should == "#{Rack::JQuery::CLOUDFLARE}\n#{Rack::JQuery::FALLBACK}" }
+    end
   end
 end
 
@@ -67,6 +71,15 @@ describe "Inserting the CDN" do
     it_should_behave_like "Any route"
     subject { last_response.body }
     let(:expected) { Rack::JQuery::GOOGLE }
+    it { should include expected }
+  end
+  context "Cloudflare CDN" do
+    before do
+      get "/cloudflare-cdn"
+    end
+    it_should_behave_like "Any route"
+    subject { last_response.body }
+    let(:expected) { Rack::JQuery::CLOUDFLARE }
     it { should include expected }
   end
 end
