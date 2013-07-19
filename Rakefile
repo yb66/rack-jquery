@@ -46,3 +46,28 @@ namespace :examples do
   end
 
 end
+
+
+namespace :cdn do
+  require 'open3'
+  desc "An availability check, for sanity"
+  task :check do
+    require_relative './lib/rack/jquery.rb'
+    Rack::JQuery::CDN.constants.each do |const|
+      url = "#{Rack::JQuery::CDN.const_get(const)}"
+      url = "http:#{url}" unless url.start_with? "http"
+      cmd = "curl -I #{url}"
+      puts cmd
+      puts catch(:status) {
+        Open3.popen3(cmd) do |_,stdout,_|
+          line = stdout.gets
+          throw :status, "Nothing for #{const}" if line.nil?
+          puts line.match("HTTP/1.1 404 Not Found") ?
+              "FAILED: #{const}" :
+              "PASSED: #{const}"
+        end
+      }
+    end
+  end
+
+end

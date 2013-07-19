@@ -9,17 +9,23 @@ module Rack
 
     JQUERY_FILE_NAME = "jquery-#{JQUERY_VERSION}.min.js"
 
-    # Script tags for the Media Temple CDN
-    MEDIA_TEMPLE = "<script src='http://code.jquery.com/#{JQUERY_FILE_NAME}'></script>"
 
-    # Script tags for the Google CDN
-    GOOGLE = "<script src='//ajax.googleapis.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js'></script>"
+    # Namespaced CDNs for convenience.
+    module CDN
 
-    # Script tags for the Microsoft CDN
-    MICROSOFT = "<script src='//ajax.aspnetcdn.com/ajax/jQuery/#{JQUERY_FILE_NAME}'></script>"
+      # Script tags for the Media Temple CDN
+      MEDIA_TEMPLE = "http://code.jquery.com/#{JQUERY_FILE_NAME}"
 
-    # Script tags for the Cloudflare CDN
-    CLOUDFLARE = "<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js'></script>"
+      # Script tags for the Google CDN
+      GOOGLE = "//ajax.googleapis.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js"
+
+      # Script tags for the Microsoft CDN
+      MICROSOFT = "//ajax.aspnetcdn.com/ajax/jQuery/#{JQUERY_FILE_NAME}"
+
+      # Script tags for the Cloudflare CDN
+      CLOUDFLARE = "//cdnjs.cloudflare.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js"
+
+    end
 
     # This javascript checks if the jQuery object has loaded. If not, that most likely means the CDN is unreachable, so it uses the local minified jQuery.
     FALLBACK = <<STR
@@ -35,17 +41,17 @@ STR
     def self.cdn( organisation=:media_temple  )
       script = case organisation
         when :media_temple
-          MEDIA_TEMPLE
+          CDN::MEDIA_TEMPLE
         when :microsoft
-          MICROSOFT
+          CDN::MICROSOFT
         when :cloudflare
-          CLOUDFLARE
+          CDN::CLOUDFLARE
         when :google
-          GOOGLE
+          CDN::GOOGLE
         else
-          MEDIA_TEMPLE
+          CDN::MEDIA_TEMPLE
       end
-      "#{script}\n#{FALLBACK}"
+      "<script src='#{script}'></script>\n#{FALLBACK}"
     end
 
 
