@@ -1,5 +1,12 @@
 # CH CH CH CHANGES #
 
+## Friday the 19th of July 2013, v1.4.0 ##
+
+* Made Media Temple the default CDN, since Google and Microsoft (and others) are now in the employ of Lucifer and his minions running the states of the UK and US, I don't feel like helping them track people round the web in any way, and certainly not making it easier for them by default.
+
+----
+
+
 ## v1.3.2 ##
 
 Thursday the 23rd of May 2013
