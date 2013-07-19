@@ -8,7 +8,7 @@ describe "The class methods" do
   context "Given an argument" do
     context "of nil (the default)" do
       let(:organisation) { nil }
-      it { should == "#{Rack::JQuery::GOOGLE}\n#{Rack::JQuery::FALLBACK}" }
+      it { should == "#{Rack::JQuery::MEDIA_TEMPLE}\n#{Rack::JQuery::FALLBACK}" }
     end
     context "of :google" do
       let(:organisation) { :google }
@@ -70,7 +70,7 @@ describe "Inserting the CDN" do
     end
     it_should_behave_like "Any route"
     subject { last_response.body }
-    let(:expected) { Rack::JQuery::GOOGLE }
+    let(:expected) { Rack::JQuery::MEDIA_TEMPLE }
     it { should include expected }
   end
   context "Cloudflare CDN" do
