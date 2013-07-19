@@ -8,23 +8,23 @@ describe "The class methods" do
   context "Given an argument" do
     context "of nil (the default)" do
       let(:organisation) { nil }
-      it { should == "#{Rack::JQuery::MEDIA_TEMPLE}\n#{Rack::JQuery::FALLBACK}" }
+      it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
     end
     context "of :google" do
       let(:organisation) { :google }
-      it { should == "#{Rack::JQuery::GOOGLE}\n#{Rack::JQuery::FALLBACK}" }
+      it { should == "<script src='#{Rack::JQuery::CDN::GOOGLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
     end
     context "of :microsoft" do
       let(:organisation) { :microsoft }
-      it { should == "#{Rack::JQuery::MICROSOFT}\n#{Rack::JQuery::FALLBACK}" }
+      it { should == "<script src='#{Rack::JQuery::CDN::MICROSOFT}'></script>\n#{Rack::JQuery::FALLBACK}" }
     end
     context "of :media_temple" do
       let(:organisation) { :media_temple }
-      it { should == "#{Rack::JQuery::MEDIA_TEMPLE}\n#{Rack::JQuery::FALLBACK}" }
+      it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
     end
     context "of :media_temple" do
       let(:organisation) { :cloudflare }
-      it { should == "#{Rack::JQuery::CLOUDFLARE}\n#{Rack::JQuery::FALLBACK}" }
+      it { should == "<script src='#{Rack::JQuery::CDN::CLOUDFLARE}'></script>\n#{Rack::JQuery::FALLBACK}" }
     end
   end
 end
@@ -43,7 +43,7 @@ describe "Inserting the CDN" do
     end
     it_should_behave_like "Any route"
     subject { last_response.body }
-    let(:expected) { Rack::JQuery::GOOGLE }
+    let(:expected) { Rack::JQuery::CDN::GOOGLE }
     it { should include expected }
   end
   context "Microsoft CDN" do
@@ -52,7 +52,7 @@ describe "Inserting the CDN" do
     end
     it_should_behave_like "Any route"
     subject { last_response.body }
-    let(:expected) { Rack::JQuery::MICROSOFT }
+    let(:expected) { Rack::JQuery::CDN::MICROSOFT }
     it { should include expected }
   end
   context "Media_temple CDN" do
@@ -61,7 +61,7 @@ describe "Inserting the CDN" do
     end
     it_should_behave_like "Any route"
     subject { last_response.body }
-    let(:expected) { Rack::JQuery::MEDIA_TEMPLE }
+    let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
     it { should include expected }
   end
   context "Unspecified CDN" do
@@ -70,7 +70,7 @@ describe "Inserting the CDN" do
     end
     it_should_behave_like "Any route"
     subject { last_response.body }
-    let(:expected) { Rack::JQuery::MEDIA_TEMPLE }
+    let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
     it { should include expected }
   end
   context "Cloudflare CDN" do
@@ -79,7 +79,7 @@ describe "Inserting the CDN" do
     end
     it_should_behave_like "Any route"
     subject { last_response.body }
-    let(:expected) { Rack::JQuery::CLOUDFLARE }
+    let(:expected) { Rack::JQuery::CDN::CLOUDFLARE }
     it { should include expected }
   end
 end
