@@ -30,9 +30,9 @@ module Rack
 </script>
 STR
 
-    # @param [Symbol] organisation Choose which CDN to use, either :google, :microsoft or :media_temple
+    # @param [Symbol] organisation Choose which CDN to use, either :google, :microsoft or :media_temple, or :cloudflare
     # @return [String] The HTML script tags to get the CDN.
-    def self.cdn( organisation=:google  )
+    def self.cdn( organisation=:media_temple  )
       script = case organisation
         when :media_temple
           MEDIA_TEMPLE
@@ -40,8 +40,10 @@ STR
           MICROSOFT
         when :cloudflare
           CLOUDFLARE
-        else
+        when :google
           GOOGLE
+        else
+          MEDIA_TEMPLE
       end
       "#{script}\n#{FALLBACK}"
     end
