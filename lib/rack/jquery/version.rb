@@ -2,7 +2,7 @@ module Rack
   class JQuery
     
     # the version of this library
-    VERSION = "1.4.0"
+    VERSION = "1.5.0"
 
     # the version of jQuery it supports.
     JQUERY_VERSION = "2.0.3" 

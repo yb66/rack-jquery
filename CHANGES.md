@@ -7,6 +7,7 @@
 * Updated jQuery to v2.0.3.
 * Updated gemspec to only pull in the correct vendored version of jQuery from the repo.
 * Last modified date on the file is now using the correct format, RFC 2822, not RFC 2109's as before.
+* Added in a check that the CDNs support the version being pushed out, for my sanity. Slight reorganisation of the code to help with this.
 
 ----
 
