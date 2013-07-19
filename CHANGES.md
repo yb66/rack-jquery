@@ -1,6 +1,17 @@
 # CH CH CH CHANGES #
 
-## Friday the 19th of July 2013, v1.4.0 ##
+## Friday the 19th of July 2013 ##
+
+### v1.5.0 ###
+
+* Updated jQuery to v2.0.3.
+* Updated gemspec to only pull in the correct vendored version of jQuery from the repo.
+* Last modified date on the file is now using the correct format, RFC 2822, not RFC 2109's as before.
+
+----
+
+
+### v1.4.0 ###
 
 * Made Media Temple the default CDN, since Google and Microsoft (and others) are now in the employ of Lucifer and his minions running the states of the UK and US, I don't feel like helping them track people round the web in any way, and certainly not making it easier for them by default.
 
