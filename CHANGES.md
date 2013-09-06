@@ -1,5 +1,13 @@
 # CH CH CH CHANGES #
 
+## Friday the 6th of September 2013, v1.5.1 ##
+
+* Added the source map and fallback routes for it.
+* Minor bug fix in the specs.
+
+----
+
+
 ## Friday the 19th of July 2013 ##
 
 ### v1.5.0 ###
