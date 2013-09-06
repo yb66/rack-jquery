@@ -8,6 +8,7 @@ module Rack
     include Helpers
 
     JQUERY_FILE_NAME = "jquery-#{JQUERY_VERSION}.min.js"
+    JQUERY_SOURCE_MAP = "jquery-#{JQUERY_VERSION}.min.map"
 
 
     # Namespaced CDNs for convenience.
@@ -72,6 +73,7 @@ STR
     def initialize( app, options={} )
       @app, @options  = app, DEFAULT_OPTIONS.merge(options)
       @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FILE_NAME
+      @http_path_to_source_map = ::File.join @options[:http_path], JQUERY_SOURCE_MAP
     end
 
 
@@ -97,6 +99,12 @@ STR
           response.status = 200
           response.write ::File.read( ::File.expand_path "../../../vendor/assets/javascripts/#{JQUERY_FILE_NAME}", __FILE__)
         end
+        response.finish
+      elsif request.path_info == @http_path_to_source_map
+        response = Rack::Response.new
+        # No need for caching with the source map
+        response.status = 200
+        response.write ::File.read( ::File.expand_path "../../../vendor/assets/javascripts/#{JQUERY_SOURCE_MAP}", __FILE__)
         response.finish
       else
         @app.call(env)
