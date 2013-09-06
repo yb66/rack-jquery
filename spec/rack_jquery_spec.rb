@@ -22,7 +22,7 @@ describe "The class methods" do
       let(:organisation) { :media_temple }
       it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
     end
-    context "of :media_temple" do
+    context "of :cloudflare" do
       let(:organisation) { :cloudflare }
       it { should == "<script src='#{Rack::JQuery::CDN::CLOUDFLARE}'></script>\n#{Rack::JQuery::FALLBACK}" }
     end
