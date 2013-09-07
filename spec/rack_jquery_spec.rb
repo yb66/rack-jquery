@@ -4,7 +4,8 @@ require 'spec_helper'
 require_relative "../lib/rack/jquery.rb"
 
 describe "The class methods" do
-  subject { Rack::JQuery.cdn organisation }
+  let(:env) { {} }
+  subject { Rack::JQuery.cdn env, :organisation => organisation }
   context "Given an argument" do
     context "of nil (the default)" do
       let(:organisation) { nil }
@@ -30,57 +31,119 @@ describe "The class methods" do
 end
 
 describe "Inserting the CDN" do
-  include_context "All routes"
-  context "Check the examples run at all" do
-    before do
-      get "/"
+
+  # These check the default is overriden
+  # when `cdn` is given a value
+  # but when not, the default is used.
+  context "When given a default" do
+    include_context "All routes" do
+      let(:app){ AppWithDefaults }
     end
-    it_should_behave_like "Any route"
+    context "Check the examples run at all" do
+      before do
+        get "/"
+      end
+      it_should_behave_like "Any route"
+    end
+    context "Google CDN" do
+      before do
+        get "/google-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::GOOGLE }
+      it { should include expected }
+    end
+    context "Microsoft CDN" do
+      before do
+        get "/microsoft-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::MICROSOFT }
+      it { should include expected }
+    end
+    context "Media_temple CDN" do
+      before do
+        get "/media-temple-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
+      it { should include expected }
+    end
+    context "Unspecified CDN" do
+      before do
+        get "/unspecified-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::CLOUDFLARE }
+      it { should include expected }
+    end
+    context "Cloudflare CDN" do
+      before do
+        get "/cloudflare-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::CLOUDFLARE }
+      it { should include expected }
+    end
   end
-  context "Google CDN" do
-    before do
-      get "/google-cdn"
+  context "When not given a default" do
+    include_context "All routes"
+    context "Check the examples run at all" do
+      before do
+        get "/"
+      end
+      it_should_behave_like "Any route"
     end
-    it_should_behave_like "Any route"
-    subject { last_response.body }
-    let(:expected) { Rack::JQuery::CDN::GOOGLE }
-    it { should include expected }
-  end
-  context "Microsoft CDN" do
-    before do
-      get "/microsoft-cdn"
+    context "Google CDN" do
+      before do
+        get "/google-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::GOOGLE }
+      it { should include expected }
     end
-    it_should_behave_like "Any route"
-    subject { last_response.body }
-    let(:expected) { Rack::JQuery::CDN::MICROSOFT }
-    it { should include expected }
-  end
-  context "Media_temple CDN" do
-    before do
-      get "/media-temple-cdn"
+    context "Microsoft CDN" do
+      before do
+        get "/microsoft-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::MICROSOFT }
+      it { should include expected }
     end
-    it_should_behave_like "Any route"
-    subject { last_response.body }
-    let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
-    it { should include expected }
-  end
-  context "Unspecified CDN" do
-    before do
-      get "/unspecified-cdn"
+    context "Media_temple CDN" do
+      before do
+        get "/media-temple-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
+      it { should include expected }
     end
-    it_should_behave_like "Any route"
-    subject { last_response.body }
-    let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
-    it { should include expected }
-  end
-  context "Cloudflare CDN" do
-    before do
-      get "/cloudflare-cdn"
+    context "Unspecified CDN" do
+      before do
+        get "/unspecified-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
+      it { should include expected }
     end
-    it_should_behave_like "Any route"
-    subject { last_response.body }
-    let(:expected) { Rack::JQuery::CDN::CLOUDFLARE }
-    it { should include expected }
+    context "Cloudflare CDN" do
+      before do
+        get "/cloudflare-cdn"
+      end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::CLOUDFLARE }
+      it { should include expected }
+    end
   end
 end
 

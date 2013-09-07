@@ -1,13 +1,17 @@
 require "rack/jquery/version"
 require "rack/jquery/helpers"
 
+# @see http://rack.github.io/
 module Rack
 
   # jQuery CDN script tags and fallback in one neat package.
   class JQuery
     include Helpers
 
+    # Current file name of fallback.
     JQUERY_FILE_NAME = "jquery-#{JQUERY_VERSION}.min.js"
+
+    # Fallback source map file name.
     JQUERY_SOURCE_MAP = "jquery-#{JQUERY_VERSION}.min.map"
 
 
@@ -37,9 +41,14 @@ module Rack
 </script>
 STR
 
-    # @param [Symbol] organisation Choose which CDN to use, either :google, :microsoft or :media_temple, or :cloudflare
+    # @param [Hash] env The rack env hash.
+    # @param [Symbol] organisation Choose which CDN to use, either :google, :microsoft or :media_temple, or :cloudflare. This will override anything set via the `use` statement.
     # @return [String] The HTML script tags to get the CDN.
-    def self.cdn( organisation=:media_temple  )
+    def self.cdn( env, options={}  )
+      organisation =  options[:organisation] ||
+                        env["rack.jquery.organisation"] ||
+                        :media_temple
+
       script = case organisation
         when :media_temple
           CDN::MEDIA_TEMPLE
@@ -65,15 +74,21 @@ STR
     # @param [#call] app
     # @param [Hash] options
     # @option options [String] :http_path If you wish the jQuery fallback route to be "/js/jquery-1.9.1.min.js" (or whichever version this is at) then do nothing, that's the default. If you want the path to be "/assets/javascripts/jquery-1.9.1.min.js" then pass in `:http_path => "/assets/javascripts".
+    # @option options [Symbol] :organisation see {Rack::JQuery.cdn}
     # @example
     #   # The default:
     #   use Rack::JQuery
+    #
     #   # With a different route to the fallback:
     #   use Rack::JQuery, :http_path => "/assets/js"
+    #
+    #   # With a default organisation:
+    #   use Rack::JQuery, :organisation => :cloudflare
     def initialize( app, options={} )
       @app, @options  = app, DEFAULT_OPTIONS.merge(options)
       @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FILE_NAME
       @http_path_to_source_map = ::File.join @options[:http_path], JQUERY_SOURCE_MAP
+      @organisation = options.fetch :organisation, :media_temple
     end
 
 
@@ -87,6 +102,7 @@ STR
     # @param (see #call)
     def _call( env )
       request = Rack::Request.new(env.dup)
+      env.merge! "rack.jquery.organisation" => @organisation
       if request.path_info == @http_path_to_jquery
         response = Rack::Response.new
         # for caching

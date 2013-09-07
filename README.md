@@ -18,11 +18,11 @@ Have a look in the examples directory, but here's a snippet.
 * Install it (see below)
 * `require 'rack/jquery'`.
 * If you want fallback then add this to your middleware stack: `use Rack::JQuery`
-* Put this in the head of your layout (the example is Haml but you can use whatever you like)
+* Put this in the head of your layout (the example is Haml but you can use whatever you like) and pass it the Rack env:
 
     <pre><code>
     %head
-      = Rack::JQuery.cdn
+      = Rack::JQuery.cdn( env )
     </code></pre>
 
 Now you have the script tags to Media Temple's CDN in the head (you can also use Google or Microsoft, or Cloudflare, see the docs).
