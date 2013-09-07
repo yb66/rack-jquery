@@ -45,6 +45,10 @@ STR
     # @param [Symbol] organisation Choose which CDN to use, either :google, :microsoft or :media_temple, or :cloudflare. This will override anything set via the `use` statement.
     # @return [String] The HTML script tags to get the CDN.
     def self.cdn( env, options={}  )
+      if env.nil? || env.has_key?(:organisation)
+        fail ArgumentError, "The Rack::JQuery.cdn method needs the Rack environment passed to it, or at the very least, an empty hash."
+      end
+
       organisation =  options[:organisation] ||
                         env["rack.jquery.organisation"] ||
                         :media_temple
