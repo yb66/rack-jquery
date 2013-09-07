@@ -1,5 +1,12 @@
 # CH CH CH CHANGES #
 
+## Saturday the 7th of September 2013, v2.0.0 ##
+
+* Added ability to pass `use` a default organisation.
+* Added a failure message for those who don't notice the API changes.
+
+----
+
 ## Friday the 6th of September 2013, v1.5.1 ##
 
 * Added the source map and fallback routes for it.
