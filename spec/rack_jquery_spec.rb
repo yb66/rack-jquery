@@ -6,7 +6,8 @@ require_relative "../lib/rack/jquery.rb"
 describe "The class methods" do
   let(:env) { {} }
   subject { Rack::JQuery.cdn env, :organisation => organisation }
-  context "Given an argument" do
+
+  context "Given the organisation option" do
     context "of nil (the default)" do
       let(:organisation) { nil }
       it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
@@ -26,6 +27,18 @@ describe "The class methods" do
     context "of :cloudflare" do
       let(:organisation) { :cloudflare }
       it { should == "<script src='#{Rack::JQuery::CDN::CLOUDFLARE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+    end
+  end
+
+  context "Given no Rack env argument" do
+    it "should fail and give a message" do
+      expect{ Rack::JQuery.cdn nil }.to raise_error(ArgumentError)
+    end
+    
+    context "and an organisation option" do
+      it "should fail and give a message" do
+        expect{ Rack::JQuery.cdn nil, {:organisation => :microsoft} }.to raise_error(ArgumentError)
+      end
     end
   end
 end
