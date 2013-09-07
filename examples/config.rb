@@ -47,36 +47,82 @@ STR
   end
 end
 
+
+class AppWithDefaults < Sinatra::Base
+
+  enable :inline_templates
+  use Rack::JQuery, :organisation => :cloudflare
+
+  get "/" do
+    output = <<STR
+!!!
+%body
+  %ul
+    %li
+      %a{ href: "/google-cdn"} google-cdn
+    %li
+      %a{ href: "/media-temple-cdn"} media-temple-cdn
+    %li
+      %a{ href: "/microsoft-cdn"} microsoft-cdn
+    %li
+      %a{ href: "/cloudflare-cdn"} cloudflare-cdn
+    %li
+      %a{ href: "/unspecified-cdn"} unspecified-cdn
+STR
+    haml output
+  end
+
+  get "/google-cdn" do
+    haml :index, :layout => :google
+  end
+
+  get "/media-temple-cdn" do
+    haml :index, :layout => :mediatemple
+  end
+
+  get "/microsoft-cdn" do
+    haml :index, :layout => :microsoft
+  end
+
+  get "/cloudflare-cdn" do
+    haml :index, :layout => :cloudflare
+  end
+
+  get "/unspecified-cdn" do
+    haml :index, :layout => :unspecified
+  end
+end
+
 __END__
 
 @@google
 %html
   %head
-    = Rack::JQuery.cdn( :google )
+    = Rack::JQuery.cdn(env, :organisation => :google )
   = yield
 
 @@microsoft
 %html
   %head
-    = Rack::JQuery.cdn( :microsoft )
+    = Rack::JQuery.cdn( env, :organisation => :microsoft )
   = yield
 
 @@mediatemple
 %html
   %head
-    = Rack::JQuery.cdn( :media_temple )
+    = Rack::JQuery.cdn( env, :organisation => :media_temple )
   = yield
 
 @@cloudflare
 %html
   %head
-    = Rack::JQuery.cdn( :cloudflare )
+    = Rack::JQuery.cdn( env, :organisation => :cloudflare )
   = yield
 
 @@unspecified
 %html
   %head
-    = Rack::JQuery.cdn()
+    = Rack::JQuery.cdn(env)
   = yield
 
 @@index
