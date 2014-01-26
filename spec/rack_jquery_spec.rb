@@ -4,40 +4,100 @@ require 'spec_helper'
 require_relative "../lib/rack/jquery.rb"
 
 describe "The class methods" do
-  let(:env) { {} }
-  subject { Rack::JQuery.cdn env, :organisation => organisation }
 
-  context "Given the organisation option" do
-    context "of nil (the default)" do
-      let(:organisation) { nil }
-      it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
-    end
-    context "of :google" do
-      let(:organisation) { :google }
-      it { should == "<script src='#{Rack::JQuery::CDN::GOOGLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
-    end
-    context "of :microsoft" do
-      let(:organisation) { :microsoft }
-      it { should == "<script src='#{Rack::JQuery::CDN::MICROSOFT}'></script>\n#{Rack::JQuery::FALLBACK}" }
-    end
-    context "of :media_temple" do
-      let(:organisation) { :media_temple }
-      it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
-    end
-    context "of :cloudflare" do
-      let(:organisation) { :cloudflare }
-      it { should == "<script src='#{Rack::JQuery::CDN::CLOUDFLARE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+  context "#raiser?" do
+    subject { Rack::JQuery.raiser? env, options }
+    context "Given an option to raise" do
+      context "Set to true" do
+        let(:options) { {:raise => true} }
+
+        context "Given an empty env" do
+          let(:env) { {} }
+          it { should be_true }
+        end
+        context "Given an env with rack.jquery.raise" do
+          context "Set to true" do
+            let(:env) { {"rack.jquery.raise" => true} }
+            it { should be_true }
+          end
+          context "Set to false" do
+            let(:env) { {"rack.jquery.raise" => false} }
+            it { should be_true }
+          end
+        end
+      end
+      context "Set to false" do
+        let(:options) { {:raise => false} }
+
+        context "Given an empty env" do
+          let(:env) { {} }
+          it { should be_false }
+        end
+        context "Given an env with rack.jquery.raise" do
+          context "Set to true" do
+            let(:env) { {"rack.jquery.raise" => true} }
+            it { should be_false }
+          end
+          context "Set to false" do
+            let(:env) { {"rack.jquery.raise" => false} }
+            it { should be_false }
+          end
+        end
+
+        context "and given empty options" do
+          let(:options) { {} }
+          context "Given an env with rack.jquery.raise" do
+            context "Set to true" do
+              let(:env) { {"rack.jquery.raise" => true} }
+              it { should be_true }
+            end
+            context "Set to false" do
+              let(:env) { {"rack.jquery.raise" => false} }
+              it { should be_false }
+            end
+          end
+        end
+      end
     end
   end
 
-  context "Given no Rack env argument" do
-    it "should fail and give a message" do
-      expect{ Rack::JQuery.cdn nil }.to raise_error(ArgumentError)
+
+  context "#cdn" do
+    let(:env) { {} }
+    subject { Rack::JQuery.cdn env, :organisation => organisation }
+
+    context "Given the organisation option" do
+      context "of nil (the default)" do
+        let(:organisation) { nil }
+        it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+      end
+      context "of :google" do
+        let(:organisation) { :google }
+        it { should == "<script src='#{Rack::JQuery::CDN::GOOGLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+      end
+      context "of :microsoft" do
+        let(:organisation) { :microsoft }
+        it { should == "<script src='#{Rack::JQuery::CDN::MICROSOFT}'></script>\n#{Rack::JQuery::FALLBACK}" }
+      end
+      context "of :media_temple" do
+        let(:organisation) { :media_temple }
+        it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+      end
+      context "of :cloudflare" do
+        let(:organisation) { :cloudflare }
+        it { should == "<script src='#{Rack::JQuery::CDN::CLOUDFLARE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+      end
     end
-    
-    context "and an organisation option" do
+
+    context "Given no Rack env argument" do
       it "should fail and give a message" do
-        expect{ Rack::JQuery.cdn nil, {:organisation => :microsoft} }.to raise_error(ArgumentError)
+        expect{ Rack::JQuery.cdn nil }.to raise_error(ArgumentError)
+      end
+
+      context "and an organisation option" do
+        it "should fail and give a message" do
+          expect{ Rack::JQuery.cdn nil, {:organisation => :microsoft} }.to raise_error(ArgumentError)
+        end
       end
     end
   end
@@ -183,6 +243,6 @@ describe "Serving the fallback jquery" do
     end
     subject { last_response }
     its(:status) { should == 304 }
-    
+
   end
 end
