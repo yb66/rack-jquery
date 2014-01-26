@@ -11,10 +11,6 @@ module Rack
     # Current file name of fallback.
     JQUERY_FILE_NAME = "jquery-#{JQUERY_VERSION}.min.js"
 
-    # Fallback source map file name.
-    JQUERY_SOURCE_MAP = "jquery-#{JQUERY_VERSION}.min.map"
-
-
     # Namespaced CDNs for convenience.
     module CDN
 
@@ -42,7 +38,8 @@ module Rack
 STR
 
     # @param [Hash] env The rack env hash.
-    # @param [Symbol] organisation Choose which CDN to use, either :google, :microsoft or :media_temple, or :cloudflare. This will override anything set via the `use` statement.
+    # @param [Hash] options
+    # @option options [Symbol] :organisation Choose which CDN to use, either :google, :microsoft or :media_temple, or :cloudflare. This will override anything set via the `use` statement.
     # @return [String] The HTML script tags to get the CDN.
     def self.cdn( env, options={}  )
       if env.nil? || env.has_key?(:organisation)
@@ -91,7 +88,6 @@ STR
     def initialize( app, options={} )
       @app, @options  = app, DEFAULT_OPTIONS.merge(options)
       @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FILE_NAME
-      @http_path_to_source_map = ::File.join @options[:http_path], JQUERY_SOURCE_MAP
       @organisation = options.fetch :organisation, :media_temple
     end
 
@@ -119,12 +115,6 @@ STR
           response.status = 200
           response.write ::File.read( ::File.expand_path "../../../vendor/assets/javascripts/#{JQUERY_FILE_NAME}", __FILE__)
         end
-        response.finish
-      elsif request.path_info == @http_path_to_source_map
-        response = Rack::Response.new
-        # No need for caching with the source map
-        response.status = 200
-        response.write ::File.read( ::File.expand_path "../../../vendor/assets/javascripts/#{JQUERY_SOURCE_MAP}", __FILE__)
         response.finish
       else
         @app.call(env)
