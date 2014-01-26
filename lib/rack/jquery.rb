@@ -86,6 +86,7 @@ STR
         when :cloudflare
           CDN::CLOUDFLARE
         when :google
+          fail "#{organisation.to_s.gsub('_', ' ').capitalize}'s #{WARNING}" if raise
           CDN::GOOGLE
         else
           CDN::MEDIA_TEMPLE
