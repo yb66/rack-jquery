@@ -37,10 +37,36 @@ module Rack
 </script>
 STR
 
+    # For CDN's that don't support the current release.
+    WARNING = "CDN does not hold #{JQUERY_VERSION} at the time of this gem's release. Please use Rack::JQuery's Rake file by running rake cdn:check to confirm this, or choose another CDN."
+
+
+    # Handles the logic for whether to raise or not
+    # @note Used by the library, not for public use.
+    def self.raiser?( env, options )
+      (opt = options[:raise]).nil? ?
+        (env["rack.jquery.raise"] || false) :
+        opt
+    end
+
+
     # @param [Hash] env The rack env hash.
     # @param [Hash] options
     # @option options [Symbol] :organisation Choose which CDN to use, either :google, :microsoft or :media_temple, or :cloudflare. This will override anything set via the `use` statement.
     # @return [String] The HTML script tags to get the CDN.
+    # @example
+    #   # in a Haml file (or any type of template)
+    #   Rack::JQuery.cdn env
+    #
+    #   # Choose the organisation
+    #
+    #   # Choose the organisation
+    #   Rack::JQuery.cdn env, :organisation => :cloudflare
+    #
+    #   # Raise an error if the organisation doesn't
+    #   # support this version of jQuery
+    #   Rack::JQuery.cdn env, :raise => true
+    #
     def self.cdn( env, options={}  )
       if env.nil? || env.has_key?(:organisation)
         fail ArgumentError, "The Rack::JQuery.cdn method needs the Rack environment passed to it, or at the very least, an empty hash."
@@ -49,6 +75,8 @@ STR
       organisation =  options[:organisation] ||
                         env["rack.jquery.organisation"] ||
                         :media_temple
+
+      raise = raiser?( env, options )
 
       script = case organisation
         when :media_temple
@@ -68,7 +96,8 @@ STR
 
     # Default options hash for the middleware.
     DEFAULT_OPTIONS = {
-      :http_path => "/js"
+      :http_path => "/js",
+      :raise      =>  false
     }
 
 
@@ -76,6 +105,7 @@ STR
     # @param [Hash] options
     # @option options [String] :http_path If you wish the jQuery fallback route to be "/js/jquery-1.9.1.min.js" (or whichever version this is at) then do nothing, that's the default. If you want the path to be "/assets/javascripts/jquery-1.9.1.min.js" then pass in `:http_path => "/assets/javascripts".
     # @option options [Symbol] :organisation see {Rack::JQuery.cdn}
+    # @option options [TrueClass] :raise If one of the CDNs does not support then raise an error if it is chosen. Defaults to false.
     # @example
     #   # The default:
     #   use Rack::JQuery
@@ -85,9 +115,13 @@ STR
     #
     #   # With a default organisation:
     #   use Rack::JQuery, :organisation => :cloudflare
+    #
+    #   # Raise if CDN does not support this version of the jQuery library.
+    #   use Rack::JQuery, :raise => :true
     def initialize( app, options={} )
       @app, @options  = app, DEFAULT_OPTIONS.merge(options)
       @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FILE_NAME
+      @raise = @options.fetch :raise, false
       @organisation = options.fetch :organisation, :media_temple
     end
 
@@ -103,6 +137,7 @@ STR
     def _call( env )
       request = Rack::Request.new(env.dup)
       env.merge! "rack.jquery.organisation" => @organisation
+      env.merge! "rack.jquery.raise" => @raise
       if request.path_info == @http_path_to_jquery
         response = Rack::Response.new
         # for caching
