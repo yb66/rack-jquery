@@ -5,7 +5,7 @@ require 'rack/jquery'
 class App < Sinatra::Base
 
   enable :inline_templates
-  use Rack::JQuery
+  use Rack::JQuery, :raise => true
 
   get "/" do
     output = <<STR
