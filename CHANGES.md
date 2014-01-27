@@ -1,5 +1,13 @@
 # CH CH CH CHANGES #
 
+## Monday the 27th of January 2014, v2.1.0 ##
+
+* Can pass `:raise` as an option to both `use` and `cdn` so that an exception is raised if the chosen organisation isn't running the current version of jQuery on its CDN. It will just warn otherwise.
+* Updated to jQuery v2.1.0.
+
+----
+
+
 ## Saturday the 7th of September 2013, v2.0.0 ##
 
 * Added ability to pass `use` a default organisation.
