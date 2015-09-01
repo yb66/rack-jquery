@@ -67,32 +67,46 @@ STR
     #   # support this version of jQuery
     #   Rack::JQuery.cdn env, :raise => true
     #
+    #   # Use the unminified version from the CDN
+    #   Rack::JQuery.cdn env, :debug => true
     def self.cdn( env, options={}  )
       if env.nil? || env.has_key?(:organisation)
         fail ArgumentError, "The Rack::JQuery.cdn method needs the Rack environment passed to it, or at the very least, an empty hash."
       end
 
-      organisation =  options[:organisation] ||
-                        env["rack.jquery.organisation"] ||
+
+      organisation =  options[:organisation]
+      if organisation.nil? # because false is valid
+        organisation = env["rack.jquery_.organisation"] ||
                         :media_temple
+      end
 
       raise = raiser?( env, options )
 
-      script = case organisation
-        when :media_temple
-          CDN::MEDIA_TEMPLE
-        when :microsoft
-          CDN::MICROSOFT
-        when :cloudflare
-          CDN::CLOUDFLARE
-        when :google
-          meth = raise ? :fail : :warn
-          send meth, "#{organisation.to_s.gsub('_', ' ').capitalize}'s #{WARNING}" 
-          CDN::GOOGLE
-        else
-          CDN::MEDIA_TEMPLE
+      unless organisation == false
+        script_src = 
+          case organisation
+            when :media_temple
+              CDN::MEDIA_TEMPLE
+            when :microsoft
+              CDN::MICROSOFT
+            when :cloudflare
+              CDN::CLOUDFLARE
+            when :google
+              meth = raise ? :fail : :warn
+              send meth, "#{organisation.to_s.gsub('_', ' ').capitalize}'s #{WARNING}" 
+              CDN::GOOGLE
+            else
+              CDN::MEDIA_TEMPLE
+            end
+          
+        debug = options.fetch :debug, false
+  
+        script_src = "#{script_src[0..-7]}js" if debug
+        "<script src='#{script_src}'></script>\n#{FALLBACK}"
+      else
+        "<script src='#{script_src}'></script>\n#{FALLBACK}"
       end
-      "<script src='#{script}'></script>\n#{FALLBACK}"
     end
 
 
