@@ -65,27 +65,63 @@ describe "The class methods" do
   context "#cdn" do
     let(:env) { {} }
     subject { Rack::JQuery.cdn env, :organisation => organisation }
-
+    let(:expected) { "<script src='#{src}'></script>\n#{Rack::JQuery::FALLBACK}" }
+    let(:unminified) { "#{src[0..-7]}js" }
     context "Given the organisation option" do
       context "of nil (the default)" do
         let(:organisation) { nil }
-        it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+        let(:src){ Rack::JQuery::CDN::MEDIA_TEMPLE }
+        it { should == expected }
+        context "and debug" do
+          subject { Rack::JQuery.cdn env, :organisation => organisation, :debug => true }
+          it { should_not include expected }
+          it { should include unminified }
+        end
       end
       context "of :google" do
         let(:organisation) { :google }
-        it { should == "<script src='#{Rack::JQuery::CDN::GOOGLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+        let(:src){ Rack::JQuery::CDN::GOOGLE }
+        it { should == expected }
+        context "and debug" do
+          subject { Rack::JQuery.cdn env, :organisation => organisation, :debug => true }
+          it { should_not include expected }
+          it { should include unminified }
+        end
       end
       context "of :microsoft" do
         let(:organisation) { :microsoft }
-        it { should == "<script src='#{Rack::JQuery::CDN::MICROSOFT}'></script>\n#{Rack::JQuery::FALLBACK}" }
+        let(:src){ Rack::JQuery::CDN::MICROSOFT }
+        it { should == expected }
+        context "and debug" do
+          subject { Rack::JQuery.cdn env, :organisation => organisation, :debug => true }
+          it { should_not include expected }
+          it { should include unminified }
+        end
       end
       context "of :media_temple" do
         let(:organisation) { :media_temple }
-        it { should == "<script src='#{Rack::JQuery::CDN::MEDIA_TEMPLE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+        let(:src){ Rack::JQuery::CDN::MEDIA_TEMPLE }
+        it { should == expected }
+        context "and debug" do
+          subject { Rack::JQuery.cdn env, :organisation => organisation, :debug => true }
+          it { should_not include expected }
+          it { should include unminified }
+        end
       end
       context "of :cloudflare" do
         let(:organisation) { :cloudflare }
-        it { should == "<script src='#{Rack::JQuery::CDN::CLOUDFLARE}'></script>\n#{Rack::JQuery::FALLBACK}" }
+        let(:src){ Rack::JQuery::CDN::CLOUDFLARE }
+        it { should == expected }
+        context "and debug" do
+          subject { Rack::JQuery.cdn env, :organisation => organisation, :debug => true }
+          it { should_not include expected }
+          it { should include unminified }
+        end
+      end
+      context "of false" do
+        let(:organisation) { false }
+        let(:expected) { "<script src='/js/#{Rack::JQuery::JQUERY_FILE_NAME}'></script>"}
+        it { should == expected }
       end
     end
 
@@ -184,7 +220,7 @@ describe "Inserting the CDN" do
       end
       it_should_behave_like "Any route"
       subject { last_response.body }
-      let(:expected) { Rack::JQuery::CDN::CLOUDFLARE }
+      let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
       it { should include expected }
     end
     context "Cloudflare CDN" do

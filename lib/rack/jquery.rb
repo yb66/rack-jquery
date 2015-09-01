@@ -15,7 +15,7 @@ module Rack
     module CDN
 
       # Script tags for the Media Temple CDN
-      MEDIA_TEMPLE = "http://code.jquery.com/#{JQUERY_FILE_NAME}"
+      MEDIA_TEMPLE = "//code.jquery.com/#{JQUERY_FILE_NAME}"
 
       # Script tags for the Google CDN
       GOOGLE = "//ajax.googleapis.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js"
@@ -28,11 +28,14 @@ module Rack
 
     end
 
+    # path to the fallback script
+    FALLBACK_PATH = "/js/#{JQUERY_FILE_NAME}"
+
     # This javascript checks if the jQuery object has loaded. If not, that most likely means the CDN is unreachable, so it uses the local minified jQuery.
     FALLBACK = <<STR
 <script type="text/javascript">
   if (typeof jQuery == 'undefined') {
-    document.write(unescape("%3Cscript src='/js/#{JQUERY_FILE_NAME}' type='text/javascript'%3E%3C/script%3E"))
+    document.write(unescape("%3Cscript src='#{FALLBACK_PATH}' type='text/javascript'%3E%3C/script%3E"))
   };
 </script>
 STR
@@ -67,32 +70,46 @@ STR
     #   # support this version of jQuery
     #   Rack::JQuery.cdn env, :raise => true
     #
+    #   # Use the unminified version from the CDN
+    #   Rack::JQuery.cdn env, :debug => true
     def self.cdn( env, options={}  )
       if env.nil? || env.has_key?(:organisation)
         fail ArgumentError, "The Rack::JQuery.cdn method needs the Rack environment passed to it, or at the very least, an empty hash."
       end
 
-      organisation =  options[:organisation] ||
-                        env["rack.jquery.organisation"] ||
+
+      organisation =  options[:organisation]
+      if organisation.nil? # because false is valid
+        organisation = env["rack.jquery_.organisation"] ||
                         :media_temple
+      end
 
       raise = raiser?( env, options )
 
-      script = case organisation
-        when :media_temple
-          CDN::MEDIA_TEMPLE
-        when :microsoft
-          CDN::MICROSOFT
-        when :cloudflare
-          CDN::CLOUDFLARE
-        when :google
-          meth = raise ? :fail : :warn
-          send meth, "#{organisation.to_s.gsub('_', ' ').capitalize}'s #{WARNING}" 
-          CDN::GOOGLE
-        else
-          CDN::MEDIA_TEMPLE
+      unless organisation == false
+        script_src = 
+          case organisation
+            when :media_temple
+              CDN::MEDIA_TEMPLE
+            when :microsoft
+              CDN::MICROSOFT
+            when :cloudflare
+              CDN::CLOUDFLARE
+            when :google
+              meth = raise ? :fail : :warn
+              send meth, "#{organisation.to_s.gsub('_', ' ').capitalize}'s #{WARNING}" 
+              CDN::GOOGLE
+            else
+              CDN::MEDIA_TEMPLE
+            end
+          
+        debug = options.fetch :debug, false
+  
+        script_src = "#{script_src[0..-7]}js" if debug
+        "<script src='#{script_src}'></script>\n#{FALLBACK}"
+      else
+        "<script src='#{FALLBACK_PATH}'></script>"
       end
-      "<script src='#{script}'></script>\n#{FALLBACK}"
     end
 
 
