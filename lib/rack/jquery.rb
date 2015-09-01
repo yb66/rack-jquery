@@ -96,8 +96,8 @@ STR
             when :cloudflare
               CDN::CLOUDFLARE
             when :google
-              meth = raise ? :fail : :warn
-              send meth, "#{organisation.to_s.gsub('_', ' ').capitalize}'s #{WARNING}" 
+#               meth = raise ? :fail : :warn
+#               send meth, "#{organisation.to_s.gsub('_', ' ').capitalize}'s #{WARNING}" 
               CDN::GOOGLE
             else
               CDN::MEDIA_TEMPLE
