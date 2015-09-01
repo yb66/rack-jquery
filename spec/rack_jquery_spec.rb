@@ -118,6 +118,11 @@ describe "The class methods" do
           it { should include unminified }
         end
       end
+      context "of false" do
+        let(:organisation) { false }
+        let(:expected) { "<script src='/js/#{Rack::JQuery::JQUERY_FILE_NAME}'></script>"}
+        it { should == expected }
+      end
     end
 
     context "Given no Rack env argument" do

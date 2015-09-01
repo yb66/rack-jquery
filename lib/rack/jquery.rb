@@ -28,11 +28,14 @@ module Rack
 
     end
 
+    # path to the fallback script
+    FALLBACK_PATH = "/js/#{JQUERY_FILE_NAME}"
+
     # This javascript checks if the jQuery object has loaded. If not, that most likely means the CDN is unreachable, so it uses the local minified jQuery.
     FALLBACK = <<STR
 <script type="text/javascript">
   if (typeof jQuery == 'undefined') {
-    document.write(unescape("%3Cscript src='/js/#{JQUERY_FILE_NAME}' type='text/javascript'%3E%3C/script%3E"))
+    document.write(unescape("%3Cscript src='#{FALLBACK_PATH}' type='text/javascript'%3E%3C/script%3E"))
   };
 </script>
 STR
@@ -105,7 +108,7 @@ STR
         script_src = "#{script_src[0..-7]}js" if debug
         "<script src='#{script_src}'></script>\n#{FALLBACK}"
       else
-        "<script src='#{script_src}'></script>\n#{FALLBACK}"
+        "<script src='#{FALLBACK_PATH}'></script>"
       end
     end
 
