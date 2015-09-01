@@ -15,7 +15,7 @@ module Rack
     module CDN
 
       # Script tags for the Media Temple CDN
-      MEDIA_TEMPLE = "http://code.jquery.com/#{JQUERY_FILE_NAME}"
+      MEDIA_TEMPLE = "//code.jquery.com/#{JQUERY_FILE_NAME}"
 
       # Script tags for the Google CDN
       GOOGLE = "//ajax.googleapis.com/ajax/libs/jquery/#{JQUERY_VERSION}/jquery.min.js"
