@@ -18,7 +18,7 @@ end
 group :development do
   gem "wirble"
   gem "pry"
-  gem "pry-nav"
+  gem "pry-byebug"
   gem "yard"
   gem "maruku"
 end

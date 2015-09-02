@@ -155,44 +155,55 @@ describe "Inserting the CDN" do
       it_should_behave_like "Any route"
     end
     context "Google CDN" do
-      context "With :raise set to false (the default)" do
+      context "With :raise set" do
         let(:expected) { Rack::JQuery::CDN::GOOGLE }
-        before do
-          get "/google-cdn"
-        end
-        it_should_behave_like "Any route"
-        subject { last_response.body }
-        it { should include expected }
-      end
-      context "With :raise set to true" do
-        context "via `use`" do
-          let(:app) {
-            Sinatra.new do
-              use Rack::JQuery, :raise => true
-              get "/google-cdn" do
-                Rack::JQuery.cdn( env, :organisation => :google )
-              end
-            end
-          }
-          it "should raise error as it's not supported for this version" do
-            expect { get "/google-cdn" }.to raise_error
+        context "to false (the default)" do
+          before do
+            get "/google-cdn"
           end
-#           it { should include expected }
+          it_should_behave_like "Any route"
+          subject { last_response.body }
+          it { should include expected }
         end
-        context "via the method options" do
-          let(:app) {
-            Sinatra.new do
-              use Rack::JQuery, :raise => false
-              get "/google-cdn" do
-                Rack::JQuery.cdn( env, :organisation => :google, :raise => true )
+        context "to true" do
+          context "via `use`" do
+            let(:app) {
+              Sinatra.new do
+                use Rack::JQuery, :raise => true
+                get "/google-cdn" do
+                  Rack::JQuery.cdn( env, :organisation => :google )
+                end
               end
+            }
+            # it "should raise error as it's not supported for this version" do
+  #             expect { get "/google-cdn" }.to raise_error
+  #           end
+            before do
+              get "/google-cdn"
             end
-          }
-          subject { get "/google-cdn" }
-          it "should raise error as it's not supported for this version" do
-            expect { subject }.to raise_error
+            it_should_behave_like "Any route"
+            subject { last_response.body }
+            it { should include expected }
           end
-#           it { should include expected }
+          context "via the method options" do
+            let(:app) {
+              Sinatra.new do
+                use Rack::JQuery
+                get "/google-cdn" do
+                  Rack::JQuery.cdn( env, :organisation => :google, :raise => true )
+                end
+              end
+            }
+#             it "should raise error as it's not supported for this version" do
+#               expect { subject }.to raise_error
+#             end
+            before do
+              get "/google-cdn"
+            end
+            it_should_behave_like "Any route"
+            subject { last_response.body }
+            it { should include expected }
+          end
         end
       end
     end
@@ -220,7 +231,10 @@ describe "Inserting the CDN" do
       end
       it_should_behave_like "Any route"
       subject { last_response.body }
-      let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
+      # The cloudflare CDN is specified in the app
+      # via the `use` statement, so it will be the one
+      # picked when unspecified via `cdn`
+      let(:expected) { Rack::JQuery::CDN::CLOUDFLARE }
       it { should include expected }
     end
     context "Cloudflare CDN" do
@@ -242,9 +256,16 @@ describe "Inserting the CDN" do
       it_should_behave_like "Any route"
     end
     context "Google CDN" do
-      it "Should fail" do
-        expect { get "/google-cdn" }.to raise_error
+#       it "Should fail" do
+#         expect { get "/google-cdn" }.to raise_error
+#       end
+      before do
+        get "/google-cdn"
       end
+      it_should_behave_like "Any route"
+      subject { last_response.body }
+      let(:expected) { Rack::JQuery::CDN::GOOGLE }
+      it { should include expected }
     end
     context "Microsoft CDN" do
       before do

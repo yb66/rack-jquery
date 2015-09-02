@@ -81,8 +81,9 @@ STR
 
       organisation =  options[:organisation]
       if organisation.nil? # because false is valid
-        organisation = env["rack.jquery_.organisation"] ||
-                        :media_temple
+        organisation =  env["rack.jquery.organisation"].nil? ?
+                          :media_temple :
+                          env["rack.jquery.organisation"]
       end
 
       raise = raiser?( env, options )
@@ -97,8 +98,8 @@ STR
             when :cloudflare
               CDN::CLOUDFLARE
             when :google
-              meth = raise ? :fail : :warn
-              send meth, "#{organisation.to_s.gsub('_', ' ').capitalize}'s #{WARNING}" 
+#               meth = raise ? :fail : :warn
+#               send meth, "#{organisation.to_s.gsub('_', ' ').capitalize}'s #{WARNING}" 
               CDN::GOOGLE
             else
               CDN::MEDIA_TEMPLE
@@ -137,7 +138,7 @@ STR
     #   use Rack::JQuery, :organisation => :cloudflare
     #
     #   # Raise if CDN does not support this version of the jQuery library.
-    #   use Rack::JQuery, :raise => :true
+    #   use Rack::JQuery, :raise => true
     def initialize( app, options={} )
       @app, @options  = app, DEFAULT_OPTIONS.merge(options)
       @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FILE_NAME

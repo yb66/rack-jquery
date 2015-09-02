@@ -1,5 +1,13 @@
 # CH CH CH CHANGES #
 
+##
+
+* Fixed typo that was leading to bug. Organisation set by `use` statement would be ignored in `cdn`. Introduced by commit 801a5a13a. Clarified spec for it.
+* Fixed a different bug that also made setting organisation to `false` via the `use` statement to be ignored.
+
+----
+
+
 ## Tuesday the 1st of September 2015, v2.2.0 ##
 
 * Google's CDN now serves v2.1.0 of JQuery, changes for that.

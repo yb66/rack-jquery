@@ -8,6 +8,7 @@ Spec_dir = File.expand_path( File.dirname __FILE__ )
 require 'simplecov'
 SimpleCov.start do
   add_filter "/vendor/"
+  add_filter "/vendor.noindex/"
   add_filter "/bin/"
   add_filter "/spec/"
 end
