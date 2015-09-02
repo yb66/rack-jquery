@@ -1,5 +1,13 @@
 # CH CH CH CHANGES #
 
+## Tuesday the 1st of September 2015, v2.2.0 ##
+
+* Google's CDN now serves v2.1.0 of JQuery, changes for that.
+* Added debug and organisation :false options for `cdn`, I want to be able to use the fallback in development.
+
+----
+
+
 ## Monday the 27th of January 2014, v2.1.0 ##
 
 * Can pass `:raise` as an option to both `use` and `cdn` so that an exception is raised if the chosen organisation isn't running the current version of jQuery on its CDN. It will just warn otherwise.

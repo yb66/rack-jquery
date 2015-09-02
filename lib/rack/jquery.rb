@@ -62,9 +62,10 @@ STR
     #   Rack::JQuery.cdn env
     #
     #   # Choose the organisation
-    #
-    #   # Choose the organisation
     #   Rack::JQuery.cdn env, :organisation => :cloudflare
+    #
+    #   # Choose to use the fallback path instead
+    #   Rack::JQuery.cdn env, :organisation => false
     #
     #   # Raise an error if the organisation doesn't
     #   # support this version of jQuery
