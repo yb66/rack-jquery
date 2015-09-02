@@ -231,7 +231,10 @@ describe "Inserting the CDN" do
       end
       it_should_behave_like "Any route"
       subject { last_response.body }
-      let(:expected) { Rack::JQuery::CDN::MEDIA_TEMPLE }
+      # The cloudflare CDN is specified in the app
+      # via the `use` statement, so it will be the one
+      # picked when unspecified via `cdn`
+      let(:expected) { Rack::JQuery::CDN::CLOUDFLARE }
       it { should include expected }
     end
     context "Cloudflare CDN" do
