@@ -81,8 +81,9 @@ STR
 
       organisation =  options[:organisation]
       if organisation.nil? # because false is valid
-        organisation = env["rack.jquery.organisation"] ||
-                        :media_temple
+        organisation =  env["rack.jquery.organisation"].nil? ?
+                          :media_temple :
+                          env["rack.jquery.organisation"]
       end
 
       raise = raiser?( env, options )
