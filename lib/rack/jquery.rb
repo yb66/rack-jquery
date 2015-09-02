@@ -138,7 +138,7 @@ STR
     #   use Rack::JQuery, :organisation => :cloudflare
     #
     #   # Raise if CDN does not support this version of the jQuery library.
-    #   use Rack::JQuery, :raise => :true
+    #   use Rack::JQuery, :raise => true
     def initialize( app, options={} )
       @app, @options  = app, DEFAULT_OPTIONS.merge(options)
       @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FILE_NAME
