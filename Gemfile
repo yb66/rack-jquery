@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+RUBY_ENGINE = 'ruby' unless defined? RUBY_ENGINE
 
 # Specify your gem's dependencies in rack-jquery.gemspec
 gemspec
@@ -16,9 +17,10 @@ group :examples do
 end
 
 group :development do
-  gem "wirble"
-  gem "pry"
-  gem "pry-byebug"
+  unless RUBY_ENGINE == 'jruby' || RUBY_ENGINE == "rbx"
+    gem "pry"
+    gem "pry-byebug"
+  end
   gem "yard"
   gem "maruku"
 end
