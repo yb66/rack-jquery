@@ -1,5 +1,6 @@
 require "rack/jquery/version"
 require "rack/jquery/helpers"
+require 'pathname'
 
 # @see http://rack.github.io/
 module Rack
@@ -10,6 +11,7 @@ module Rack
 
     # Current file name of fallback.
     JQUERY_FILE_NAME = "jquery-#{JQUERY_VERSION}.min.js"
+    JQUERY_SOURCE_MAP_FILE_NAME = "jquery-#{JQUERY_VERSION}.min.map"
 
     # Namespaced CDNs for convenience.
     module CDN
@@ -121,6 +123,7 @@ STR
       :raise      =>  false
     }
 
+    JQUERY_FILES_DIR = Pathname(__FILE__).join("../../../vendor/assets/javascripts")
 
     # @param [#call] app
     # @param [Hash] options
@@ -139,11 +142,31 @@ STR
     #
     #   # Raise if CDN does not support this version of the jQuery library.
     #   use Rack::JQuery, :raise => true
+    #
+    #   use Rack::JQuery, :source_map => :true
     def initialize( app, options={} )
       @app, @options  = app, DEFAULT_OPTIONS.merge(options)
       @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FILE_NAME
       @raise = @options.fetch :raise, false
+      @source_map = @options.fetch :source_map, false
+      @http_path_to_source_map = ::File.join @options[:http_path], JQUERY_SOURCE_MAP_FILE_NAME
       @organisation = options.fetch :organisation, :media_temple
+    end
+
+
+    def respond_with_local_file( source, request, date=JQUERY_VERSION_DATE )
+      response = Rack::Response.new
+      # for caching
+      response.headers.merge! caching_headers( source, date)
+
+      # There's no need to test if the IF_MODIFIED_SINCE against the release date because the header will only be passed if the file was previously accessed by the requester, and the file is never updated. If it is updated then it is accessed by a different path.
+      if request.env['HTTP_IF_MODIFIED_SINCE']
+        response.status = 304
+      else
+        response.status = 200
+        response.write JQUERY_FILES_DIR.join(source).realpath.read
+      end
+      response
     end
 
 
@@ -160,17 +183,11 @@ STR
       env.merge! "rack.jquery.organisation" => @organisation
       env.merge! "rack.jquery.raise" => @raise
       if request.path_info == @http_path_to_jquery
-        response = Rack::Response.new
-        # for caching
-        response.headers.merge! caching_headers( JQUERY_FILE_NAME, JQUERY_VERSION_DATE)
-
-        # There's no need to test if the IF_MODIFIED_SINCE against the release date because the header will only be passed if the file was previously accessed by the requester, and the file is never updated. If it is updated then it is accessed by a different path.
-        if request.env['HTTP_IF_MODIFIED_SINCE']
-          response.status = 304
-        else
-          response.status = 200
-          response.write ::File.read( ::File.expand_path "../../../vendor/assets/javascripts/#{JQUERY_FILE_NAME}", __FILE__)
-        end
+        response = respond_with_local_file JQUERY_FILE_NAME, request
+        response.headers.merge!("X-SourceMap" => @http_path_to_source_map) if @source_map
+        response.finish
+      elsif request.path_info == @http_path_to_source_map
+        response = respond_with_local_file JQUERY_SOURCE_MAP_FILE_NAME, request
         response.finish
       else
         @app.call(env)

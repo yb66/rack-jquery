@@ -332,3 +332,40 @@ describe "Serving the fallback jquery" do
 
   end
 end
+
+
+describe "Serving source maps" do
+  include Rack::Test::Methods
+  let(:app) {
+    Sinatra.new do
+      use Rack::JQuery, :source_map => true, :organisation => false
+      get "/google-cdn" do
+        Rack::JQuery.cdn( env )
+      end
+    end
+  }
+  before do
+    get "/google-cdn"
+  end
+  context "Check the body of the hosting page" do
+    subject { last_response.body }
+    let(:expected) { "<script src='/js/#{Rack::JQuery::JQUERY_FILE_NAME}'></script>"}
+    it { should include expected }
+    it_should_behave_like "Any route"
+  end
+  context "Headers" do
+    before do
+      get "/js/#{Rack::JQuery::JQUERY_FILE_NAME}"
+    end
+    it_should_behave_like "Any route"
+    subject { last_response.headers }
+    it { should include("X-SourceMap" => "/js/#{Rack::JQuery::JQUERY_SOURCE_MAP_FILE_NAME}") }
+  end
+  context "Getting the source map" do
+    before do
+      get "/js/#{Rack::JQuery::JQUERY_SOURCE_MAP_FILE_NAME}"
+    end
+    it_should_behave_like "Any route"
+  end
+
+end
