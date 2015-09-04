@@ -146,10 +146,11 @@ STR
     #   use Rack::JQuery, :source_map => :true
     def initialize( app, options={} )
       @app, @options  = app, DEFAULT_OPTIONS.merge(options)
-      @http_path_to_jquery = ::File.join @options[:http_path], JQUERY_FILE_NAME
+      js_dir = Pathname(@options[:http_path])
+      @http_path_to_jquery = js_dir.join JQUERY_FILE_NAME
       @raise = @options.fetch :raise, false
       @source_map = @options.fetch :source_map, false
-      @http_path_to_source_map = ::File.join @options[:http_path], JQUERY_SOURCE_MAP_FILE_NAME
+      @http_path_to_source_map = js_dir.join JQUERY_SOURCE_MAP_FILE_NAME
       @organisation = options.fetch :organisation, :media_temple
     end
 
@@ -182,11 +183,11 @@ STR
       request = Rack::Request.new(env.dup)
       env.merge! "rack.jquery.organisation" => @organisation
       env.merge! "rack.jquery.raise" => @raise
-      if request.path_info == @http_path_to_jquery
+      if request.path_info == @http_path_to_jquery.to_path
         response = respond_with_local_file JQUERY_FILE_NAME, request
-        response.headers.merge!("X-SourceMap" => @http_path_to_source_map) if @source_map
+        response.headers.merge!("X-SourceMap" => @http_path_to_source_map.to_path) if @source_map
         response.finish
-      elsif request.path_info == @http_path_to_source_map
+      elsif request.path_info == @http_path_to_source_map.to_path
         response = respond_with_local_file JQUERY_SOURCE_MAP_FILE_NAME, request
         response.finish
       else

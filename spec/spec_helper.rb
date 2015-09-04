@@ -2,6 +2,7 @@
 
 require 'rspec'
 Spec_dir = File.expand_path( File.dirname __FILE__ )
+require 'pry-byebug'
 
 
 # code coverage
