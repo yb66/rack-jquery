@@ -1,6 +1,14 @@
 # CH CH CH CHANGES #
 
-## Wednesday the 2nd of September 2015, v2.2.1 ##
+## v2.3.0, Monday the 11th of September 2017 ##
+
+* Updated underlying Ruby libs/gemspec because Rack and Sinatra have had
+  major point releases.
+
+----
+
+
+## v2.2.1, Wednesday the 2nd of September 2015 ##
 
 * Fixed typo that was leading to bug. Organisation set by `use` statement would be ignored in `cdn`. Introduced by commit 801a5a13a. Clarified spec for it.
 * Fixed a different bug that also made setting organisation to `false` via the `use` statement to be ignored.
@@ -9,7 +17,7 @@
 ----
 
 
-## Tuesday the 1st of September 2015, v2.2.0 ##
+## v2.2.0, Tuesday the 1st of September 2015 ##
 
 * Google's CDN now serves v2.1.0 of JQuery, changes for that.
 * Added debug and organisation :false options for `cdn`, I want to be able to use the fallback in development.
@@ -17,7 +25,7 @@
 ----
 
 
-## Monday the 27th of January 2014, v2.1.0 ##
+## v2.1.0, Monday the 27th of January 2014 ##
 
 * Can pass `:raise` as an option to both `use` and `cdn` so that an exception is raised if the chosen organisation isn't running the current version of jQuery on its CDN. It will just warn otherwise.
 * Updated to jQuery v2.1.0.
@@ -25,14 +33,14 @@
 ----
 
 
-## Saturday the 7th of September 2013, v2.0.0 ##
+## v2.0.0, Saturday the 7th of September 2013 ##
 
 * Added ability to pass `use` a default organisation.
 * Added a failure message for those who don't notice the API changes.
 
 ----
 
-## Friday the 6th of September 2013, v1.5.1 ##
+## v1.5.1, Friday the 6th of September 2013 ##
 
 * Added the source map and fallback routes for it.
 * Minor bug fix in the specs.
