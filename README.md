@@ -1,5 +1,7 @@
 # Rack::JQuery
 
+NO LONGER IN DEVELOPMENT, obvs.
+
 [jQuery](http://jquery.com/download/) CDN script tags and fallback in one neat package.
 
 ### Build status ###
